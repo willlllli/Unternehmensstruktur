@@ -1,4 +1,4 @@
-package unternehmensstruktur.views;
+/*package unternehmensstruktur.views;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -13,3 +13,4 @@ public class RootView implements BeforeEnterObserver {
         event.forwardTo("mitarbeiter");
     }
 }
+*/
