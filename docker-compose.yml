@@ -1,15 +1,12 @@
 services:
   db:
-    image: postgres:16
+    image: ghcr.io/willlllli/unternehmensstruktur-db:latest
     container_name: unternehmensstruktur-db
-    pull_policy: always  # Immer neueste Version pullen
+    pull_policy: always
     environment:
       POSTGRES_DB: unternehmenshierarchie
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-    volumes:
-      - ./database/create.sql:/docker-entrypoint-initdb.d/01_create.sql
-      - ./database/insert.sql:/docker-entrypoint-initdb.d/02_insert.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s

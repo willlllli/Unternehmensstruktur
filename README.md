@@ -16,16 +16,19 @@ Die Anwendung bildet die interne Struktur eines Unternehmens ab – von Mitarbei
 ### Voraussetzungen
 
 - [Docker](https://docs.docker.com/get-docker/) mit enthaltener Docker Compose-Integration (ab Docker Desktop 3.x bzw. Docker Engine 20.10+)
-- Git zum Klonen des Repositories
 
 ---
 
-### 1. Repository klonen
+### 1. docker-compose.yml herunterladen
 
-**Linux / macOS / Windows (PowerShell oder CMD):**
+**Linux / macOS:**
 ```bash
-git clone https://github.com/willlllli/Unternehmensstruktur.git
-cd Unternehmensstruktur
+curl -O https://raw.githubusercontent.com/willlllli/Unternehmensstruktur/main/docker-compose.yml
+```
+
+**Windows (PowerShell):**
+```powershell
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/willlllli/Unternehmensstruktur/main/docker-compose.yml -OutFile docker-compose.yml
 ```
 
 ---
@@ -37,7 +40,7 @@ docker compose up
 ```
 
 Docker startet zwei Container:
-- **db** – PostgreSQL 16, wird automatisch mit Schema und Daten initialisiert
+- **db** – PostgreSQL 16, wird automatisch mit Schema und Beispieldaten initialisiert
 - **app** – Spring Boot / Vaadin Anwendung, wartet bis die Datenbank bereit ist
 
 Die Anwendung ist anschließend unter **[http://localhost:8080](http://localhost:8080)** erreichbar.
