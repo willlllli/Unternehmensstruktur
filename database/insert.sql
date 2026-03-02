@@ -1,4 +1,4 @@
-@include create.sql
+-- @include create.sql
 
 SET search_path TO Unternehmensstruktur, public;
 
