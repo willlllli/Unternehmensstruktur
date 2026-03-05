@@ -17,7 +17,6 @@ public class AllOrganisationseinheitenView extends SimpleAllView<Organisationsei
         gridColumns.put("Einheitsnummer", OrganisationseinheitDto::getEinheitsnummer);
         gridColumns.put("Name",           OrganisationseinheitDto::getName);
         gridColumns.put("Art",            OrganisationseinheitDto::getArt);
-        gridColumns.put("Firma",          OrganisationseinheitDto::getFirma);
         gridColumns.put("Standort-ID",    OrganisationseinheitDto::getStandortId);
         detailsUrlProvider = dto -> String.valueOf(dto.getEinheitsnummer());
         detailViewSupplier = () -> new SingleOrganisationseinheitView(service);

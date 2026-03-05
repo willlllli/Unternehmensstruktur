@@ -33,9 +33,6 @@ public class Organisationseinheit {
     @JoinColumn(name = "uebergeordnete_oe")
     private Organisationseinheit uebergeordneteOe;
 
-    @Column(name = "firma", nullable = false)
-    private String firma;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leiter", nullable = false)
     private Mitarbeiter leiter;

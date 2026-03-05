@@ -18,7 +18,6 @@ public class SingleOrganisationseinheitView extends SimpleSingleView<Organisatio
         addField("Einheitsnummer",           () -> dto.getEinheitsnummer(),      value -> {},                                              Integer.class);
         addField("Name",                     () -> dto.getName(),                value -> dto.setName((String) value));
         addField("Art",                      () -> dto.getArt(),                 value -> dto.setArt((String) value));
-        addFkField("Firma",                    () -> dto.getFirma(),               value -> dto.setFirma((String) value),               "firmen");
         addFkField("Standort-ID",            () -> dto.getStandortId(),          value -> dto.setStandortId(toInt(value)),              "standorte");
         addFkField("Übergeordnete OE",  () -> dto.getUebergeordneteOeId(),  value -> dto.setUebergeordneteOeId(toInt(value)),      "organisationseinheiten");
         addFkField("Leiter (Personal-Nr)",   () -> dto.getLeiterId(),            value -> dto.setLeiterId(toInt(value)),                "mitarbeiter");
