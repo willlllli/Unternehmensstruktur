@@ -176,7 +176,6 @@ public class Mappingservice<I extends BaseEntity, D extends BaseDto> {
         dto.setArt(o.getArt());
         dto.setStandortId(o.getStandort() != null ? o.getStandort().getStandortId() : null);
         dto.setUebergeordneteOeId(o.getUebergeordneteOe() != null ? o.getUebergeordneteOe().getEinheitsnummer() : null);
-        dto.setFirma(o.getFirma());
         dto.setLeiterId(o.getLeiter() != null ? o.getLeiter().getPersonalnummer() : null);
         return dto;
     }
