@@ -191,7 +191,6 @@ public class Mappingservice<I extends BaseEntity, D extends BaseDto> {
             o.setStandort(standortRepository.findById(dto.getStandortId()).orElse(null));
         if (dto.getUebergeordneteOeId() != null)
             o.setUebergeordneteOe(organisationseinheitRepository.findById(dto.getUebergeordneteOeId()).orElse(null));
-        o.setFirma(dto.getFirma());
         if (dto.getLeiterId() != null)
             o.setLeiter(mitarbeiterRepository.findById(dto.getLeiterId()).orElse(null));
         return o;
