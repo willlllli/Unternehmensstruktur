@@ -922,16 +922,6 @@ $$;
 
 DO $$
 DECLARE
-    firmen TEXT[] := ARRAY[
-        'Deutsche Telekom AG',
-        'Telekom Deutschland GmbH',
-        'T-Systems International GmbH',
-        'congstar GmbH',
-        'Deutsche Telekom MMS GmbH',
-        'Deutsche Telekom Privatkunden-Vertrieb GmbH'
-    ];
-
-    firma_name TEXT;
     tribe_counter INT;
     supersquad_counter INT;
     superchapter_counter INT;
@@ -952,8 +942,6 @@ DECLARE
 BEGIN
     -- Für jede Firma
     FOR i IN 1..6 LOOP
-        firma_name := firmen[i];
-        
         -- 2 Tribes pro Firma
         FOR tribe_counter IN 1..2 LOOP
             -- Leiter für Tribe finden (wurde noch nicht vergeben)
@@ -964,18 +952,17 @@ BEGIN
             LIMIT 1;
 
 			-- Standort für OE wählen (muss der Firma der OE gehören)
-			select s.Standort_id
+			select Standort_id
 			into standort_id_val
-			from Buerogebaeude s
-			where s.Firma = firmen[i]
+			from Buerogebaeude
 			order by random()
 			limit 1;
             
             used_leaders := array_append(used_leaders, leiter_pnr);
             
             -- Tribe erstellen
-            INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter, Firma)
-            VALUES ('Tribe-' || i || '-' || tribe_counter, 'Tribe', standort_id_val, leiter_pnr, firma_name)
+            INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter)
+            VALUES ('Tribe-' || i || '-' || tribe_counter, 'Tribe', standort_id_val, leiter_pnr)
             RETURNING Einheitsnummer INTO tribe_id;
             
             -- 2 Supersquads pro Tribe
@@ -988,18 +975,17 @@ BEGIN
             	LIMIT 1;
 
 				-- Standort für OE wählen (muss der Firma der OE gehören)
-				select s.Standort_id
+				select Standort_id
 				into standort_id_val
-				from Buerogebaeude s
-				where s.Firma = firmen[i]
+				from Buerogebaeude
 				order by random()
 				limit 1;
                 
                 used_leaders := array_append(used_leaders, leiter_pnr);
                 
                 -- Supersquad erstellen
-                INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter, Firma, uebergeordnete_OE)
-                VALUES ('Supersquad-' || i || '-' || tribe_counter || '-' || supersquad_counter, 'Supersquad', standort_id_val, leiter_pnr, firma_name, tribe_id)
+                INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter, uebergeordnete_OE)
+                VALUES ('Supersquad-' || i || '-' || tribe_counter || '-' || supersquad_counter, 'Supersquad', standort_id_val, leiter_pnr, tribe_id)
                 RETURNING Einheitsnummer INTO supersquad_id;
                 
                 -- 3 Squads pro Supersquad
@@ -1012,18 +998,17 @@ BEGIN
 		            LIMIT 1;
 
 					-- Standort für OE wählen (muss der Firma der OE gehören)
-					select s.Standort_id
+					select Standort_id
 					into standort_id_val
-					from Standort s
-					where s.Firma = firmen[i]
+					from Standort
 					order by random()
 					limit 1;
                     
                     used_leaders := array_append(used_leaders, leiter_pnr);
                     
                     -- Squad erstellen
-                    INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter, Firma, uebergeordnete_OE)
-                    VALUES ('Squad-' || i || '-' || tribe_counter || '-' || supersquad_counter || '-' || squad_counter, 'Squad', standort_id_val, leiter_pnr, firma_name, supersquad_id);
+                    INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter, uebergeordnete_OE)
+                    VALUES ('Squad-' || i || '-' || tribe_counter || '-' || supersquad_counter || '-' || squad_counter, 'Squad', standort_id_val, leiter_pnr, supersquad_id);
                 END LOOP;
             END LOOP;
             
@@ -1037,18 +1022,17 @@ BEGIN
 	            LIMIT 1;
 
 				-- Standort für OE wählen (muss der Firma der OE gehören)
-				select s.Standort_id
+				select Standort_id
 				into standort_id_val
-				from Buerogebaeude s
-				where s.Firma = firmen[i]
+				from Buerogebaeude
 				order by random()
 				limit 1;
                 
                 used_leaders := array_append(used_leaders, leiter_pnr);
                 
                 -- Superchapter erstellen
-                INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter, Firma, uebergeordnete_OE)
-                VALUES ('Superchapter-' || i || '-' || tribe_counter || '-' || superchapter_counter, 'Superchapter', standort_id_val, leiter_pnr, firma_name, tribe_id)
+                INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter, uebergeordnete_OE)
+                VALUES ('Superchapter-' || i || '-' || tribe_counter || '-' || superchapter_counter, 'Superchapter', standort_id_val, leiter_pnr, tribe_id)
                 RETURNING Einheitsnummer INTO superchapter_id;
                 
                 -- 2 Chapters pro Superchapter
@@ -1061,18 +1045,17 @@ BEGIN
 		            LIMIT 1;
 		
 					-- Standort für OE wählen (muss der Firma der OE gehören)
-					select s.Standort_id
+					select Standort_id
 					into standort_id_val
-					from Buerogebaeude s
-					where s.Firma = firmen[i]
+					from Buerogebaeude
 					order by random()
 					limit 1;
                     
                     used_leaders := array_append(used_leaders, leiter_pnr);
                     
                     -- Chapter erstellen
-                    INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter, Firma, uebergeordnete_OE)
-                    VALUES ('Chapter-' || i || '-' || tribe_counter || '-' || superchapter_counter || '-' || chapter_counter, 'Chapter', standort_id_val, leiter_pnr, firma_name, superchapter_id);
+                    INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter, uebergeordnete_OE)
+                    VALUES ('Chapter-' || i || '-' || tribe_counter || '-' || superchapter_counter || '-' || chapter_counter, 'Chapter', standort_id_val, leiter_pnr, superchapter_id);
                 END LOOP;
             END LOOP;
         END LOOP;

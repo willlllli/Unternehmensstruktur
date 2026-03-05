@@ -79,13 +79,11 @@ create table if not exists Organisationseinheit (
 	Art					text			not null	check (Art in ('Squad', 'Supersquad', 'Chapter', 'Superchapter', 'Tribe')),
 	Standort_id			int				not null	references Standort (Standort_id),
 	uebergeordnete_OE	int							references Organisationseinheit (Einheitsnummer),
-	Firma				text			not null	references Firma (Name),
 	Leiter				personalnummer	not null	references Mitarbeiter (Personalnummer)
 );
 
 create index on Organisationseinheit(Standort_id);
 create index on Organisationseinheit(uebergeordnete_OE);
-create index on Organisationseinheit(Firma);
 create index on Organisationseinheit(Leiter);
 
 create table if not exists Mitglied (
