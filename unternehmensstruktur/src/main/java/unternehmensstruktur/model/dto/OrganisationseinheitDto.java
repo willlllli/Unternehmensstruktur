@@ -12,7 +12,6 @@ public class OrganisationseinheitDto extends BaseDto {
     private String art;
     private Integer standortId;
     private Integer uebergeordneteOeId;
-    private String firma;
     private Integer leiterId;
 
     public OrganisationseinheitDto() {
