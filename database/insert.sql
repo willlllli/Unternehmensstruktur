@@ -748,15 +748,15 @@ VALUES
 ( 9, 10000009, 'congstar GmbH', false),
 ( 10, 10000010, 'Deutsche Telekom MMS GmbH', true);
 
-INSERT INTO Telekom_Shop (
+INSERT INTO Filiale (
     Adresse_id,
     Verantwortlicher,
     Firma,
     Oeffnungszeit,
     Schliesszeit,
-    Bestand_Router,
-    Bestand_Handys,
-    Bestand_SIM_Karten
+    Bestand_Produkt_A,
+    Bestand_Produkt_B,
+    Bestand_Produkt_C
 )
 VALUES
 (11, 10000011, 'Deutsche Telekom Privatkunden-Vertrieb GmbH', '09:00', '20:00', 18,  85, 220),
@@ -777,7 +777,7 @@ BEGIN
             WHERE  Standort_id = NEW.Standort_id
         ) THEN
             RAISE EXCEPTION
-                'Standort_id % existiert in keiner Standort-Tabelle (Standort, Telekom_Shop, Buerogebaeude)',
+                'Standort_id % existiert in keiner Standort-Tabelle (Standort, Filiale, Buerogebaeude)',
                 NEW.Standort_id;
         END IF;
     END IF;

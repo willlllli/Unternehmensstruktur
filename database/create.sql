@@ -129,12 +129,12 @@ create table if not exists Projekt (
 	Fortschritt	int		check (Fortschritt between 0 and 100)
 ) inherits (IT_Asset);
 
-create table if not exists Telekom_Shop (
+create table if not exists Filiale (
 	Oeffnungszeit		time,
 	Schliesszeit		time,
-	Bestand_Router		int,
-	Bestand_Handys		int,
-	Bestand_SIM_Karten	int
+	Bestand_Produkt_A	int,
+	Bestand_Produkt_B	int,
+	Bestand_Produkt_C	int
 ) inherits (Standort);
 
 create table if not exists Buerogebaeude (
