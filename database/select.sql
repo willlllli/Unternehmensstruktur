@@ -1,22 +1,23 @@
 /*
 SET search_path TO Unternehmensstruktur, public;
 
-Select Personalnummer, Name from Mitarbeiter where Standort_id = 2
 
-Select ICTO_Nummer, Name, Status, Risikostufe, Budget from IT_Asset where Kunde = 2
+Select Personalnummer, Name from Mitarbeiter where Standort_id = x
+
+Select ICTO_Nummer, Name, Status, Risikostufe, Budget from IT_Asset where Kunde = x
 
 Select m.Personalnummer, m.Name, m.Email_geschaeftlich
 from Mitarbeiter m
 Inner join Mitglied mg on m.Personalnummer = mg.Mitarbeiter
-where Organisationseinheit = 5
+where Organisationseinheit = x
 
 SELECT m.Bezeichnung, m.Kapazitaet, m.Webex_Board_vorhanden
 FROM Meetingraum m
 LEFT JOIN Buchung b
     ON m.Bezeichnung = b.Bezeichnung
     AND m.Standort_id = b.Standort_id
-    AND b.Datum = '2026-03-02'
-WHERE m.Standort_id = 5
+    AND b.Datum = y
+WHERE m.Standort_id = x
 	and b.Datum IS NULL;
 
 SELECT oe.Einheitsnummer, oe.Name, oe.Leiter
@@ -47,6 +48,7 @@ group by ia.Organisationseinheit, oe.Name;
 
 select avg(Auslastung_Prozent) from v_Standortauslastung;
 
+-- bei Kundennummer = 1 sieht man einen Unterschied durch select distinct (Anforderung der WAB) vielleicht einmal mit und einmal ohne distinct implementieren?
 select distinct
     m.Personalnummer,
     m.Name,
@@ -58,7 +60,7 @@ JOIN IT_Asset ia
     ON mg.Organisationseinheit = ia.Organisationseinheit
 JOIN Kunde k
     ON ia.Kunde               = k.Kundennummer
-WHERE k.Kundennummer = 1
+WHERE k.Kundennummer = x
   AND ia.Status    = 'In Progress'
 ORDER BY m.Name;
 
@@ -83,5 +85,5 @@ JOIN Organisationseinheit oe
     ON dn.Organisationseinheit = oe.Einheitsnummer
 JOIN Mitarbeiter tl
     ON oe.Leiter = tl.Personalnummer
-WHERE up.ICTO_Nummer = 'ICTO-2001';
+WHERE up.ICTO_Nummer = x;
 */
