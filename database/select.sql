@@ -1,7 +1,6 @@
 /*
 SET search_path TO Unternehmensstruktur, public;
 
-
 Select Personalnummer, Name from Mitarbeiter where Standort_id = x
 
 Select ICTO_Nummer, Name, Status, Risikostufe, Budget from IT_Asset where Kunde = x
