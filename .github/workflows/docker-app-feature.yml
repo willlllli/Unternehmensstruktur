@@ -7,6 +7,7 @@ on:
       - 'unternehmensstruktur/Dockerfile'
       - 'unternehmensstruktur/pom.xml'
       - 'unternehmensstruktur/src/**'
+  workflow_dispatch:
 
 jobs:
   build-and-push:
