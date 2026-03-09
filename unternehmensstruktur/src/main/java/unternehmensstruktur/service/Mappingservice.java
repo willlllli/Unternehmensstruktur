@@ -114,24 +114,24 @@ public class Mappingservice<I extends BaseEntity, D extends BaseDto> {
         return s;
     }
 
-    public TelekomShopDto map(TelekomShop t) {
+    public FilialeDto map(Filiale t) {
         if (t == null) return null;
-        TelekomShopDto dto = new TelekomShopDto();
+        FilialeDto dto = new FilialeDto();
         dto.setStandortId(t.getStandortId());
         dto.setAdresseId(t.getAdresse() != null ? t.getAdresse().getAdresseId() : null);
         dto.setVerantwortlicher(t.getVerantwortlicher());
         dto.setFirma(t.getFirma());
         dto.setOeffnungszeit(t.getOeffnungszeit());
         dto.setSchliesszeit(t.getSchliesszeit());
-        dto.setBestandRouter(t.getBestandRouter());
-        dto.setBestandHandys(t.getBestandHandys());
-        dto.setBestandSimKarten(t.getBestandSimKarten());
+        dto.setBestandProduktA(t.getBestandProduktA());
+        dto.setBestandProduktB(t.getBestandProduktB());
+        dto.setBestandProduktC(t.getBestandProduktC());
         return dto;
     }
 
-    public TelekomShop map(TelekomShopDto dto) {
+    public Filiale map(FilialeDto dto) {
         if (dto == null) return null;
-        TelekomShop t = new TelekomShop();
+        Filiale t = new Filiale();
         t.setStandortId(dto.getStandortId());
         if (dto.getAdresseId() != null)
             t.setAdresse(adresseRepository.findById(dto.getAdresseId()).orElse(null));
@@ -139,9 +139,9 @@ public class Mappingservice<I extends BaseEntity, D extends BaseDto> {
         t.setFirma(dto.getFirma());
         t.setOeffnungszeit(dto.getOeffnungszeit());
         t.setSchliesszeit(dto.getSchliesszeit());
-        t.setBestandRouter(dto.getBestandRouter());
-        t.setBestandHandys(dto.getBestandHandys());
-        t.setBestandSimKarten(dto.getBestandSimKarten());
+        t.setBestandProduktA(dto.getBestandProduktA());
+        t.setBestandProduktB(dto.getBestandProduktB());
+        t.setBestandProduktC(dto.getBestandProduktC());
         return t;
     }
 

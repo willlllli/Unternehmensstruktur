@@ -40,7 +40,7 @@ public class AppLayoutBasic extends AppLayout {
         nav.addItem(new SideNavItem("IT Systeme",             "/it-systeme",             VaadinIcon.LAPTOP.create()));
         nav.addItem(new SideNavItem("Projekte",               "/projekte",               VaadinIcon.CLIPBOARD.create()));
         nav.addItem(new SideNavItem("Abh\u00e4ngigkeiten",     "/abhaengigkeiten",        VaadinIcon.CONNECT.create()));
-        nav.addItem(new SideNavItem("Telekom Shops",          "/telekom-shops",          VaadinIcon.SHOP.create()));
+        nav.addItem(new SideNavItem("Filialen",               "/filialen",               VaadinIcon.SHOP.create()));
         nav.addItem(new SideNavItem("B\u00fcrogeb\u00e4ude",   "/buerogebaeude",          VaadinIcon.FACTORY.create()));
         nav.addItem(new SideNavItem("Arbeitspl\u00e4tze",      "/arbeitsplaetze",         VaadinIcon.DESKTOP.create()));
         nav.addItem(new SideNavItem("Schreibtische",          "/schreibtische",          VaadinIcon.DESKTOP.create()));
