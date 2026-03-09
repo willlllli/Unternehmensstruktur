@@ -922,6 +922,16 @@ $$;
 
 DO $$
 DECLARE
+    firmen TEXT[] := ARRAY[
+        'Deutsche Telekom AG',
+        'Telekom Deutschland GmbH',
+        'T-Systems International GmbH',
+        'congstar GmbH',
+        'Deutsche Telekom MMS GmbH',
+        'Deutsche Telekom Privatkunden-Vertrieb GmbH'
+    ];
+
+    firma_name TEXT;
     tribe_counter INT;
     supersquad_counter INT;
     superchapter_counter INT;
@@ -942,6 +952,8 @@ DECLARE
 BEGIN
     -- Für jede Firma
     FOR i IN 1..6 LOOP
+        firma_name := firmen[i];
+
         -- 2 Tribes pro Firma
         FOR tribe_counter IN 1..2 LOOP
             -- Leiter für Tribe finden (wurde noch nicht vergeben)
@@ -952,17 +964,18 @@ BEGIN
             LIMIT 1;
 
 			-- Standort für OE wählen (muss der Firma der OE gehören)
-			select Standort_id
+			select s.Standort_id
 			into standort_id_val
-			from Buerogebaeude
+			from Buerogebaeude s
+			where s.Firma = firmen[i]
 			order by random()
 			limit 1;
 
             used_leaders := array_append(used_leaders, leiter_pnr);
 
             -- Tribe erstellen
-            INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter)
-            VALUES ('Tribe-' || i || '-' || tribe_counter, 'Tribe', standort_id_val, leiter_pnr)
+            INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter, Firma)
+            VALUES ('Tribe-' || i || '-' || tribe_counter, 'Tribe', standort_id_val, leiter_pnr, firma_name)
             RETURNING Einheitsnummer INTO tribe_id;
 
             -- 2 Supersquads pro Tribe
