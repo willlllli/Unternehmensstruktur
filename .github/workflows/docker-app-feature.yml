@@ -1,0 +1,35 @@
+name: Build and Push App Image (Feature Branch)
+
+on:
+  push:
+    branches: [feature/standortauslastung]
+    paths:
+      - 'unternehmensstruktur/Dockerfile'
+      - 'unternehmensstruktur/pom.xml'
+      - 'unternehmensstruktur/src/**'
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./unternehmensstruktur
+          push: true
+          tags: ghcr.io/willlllli/unternehmensstruktur:feature-standortauslastung
