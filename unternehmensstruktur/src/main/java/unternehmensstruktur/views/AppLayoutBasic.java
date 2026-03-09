@@ -46,6 +46,7 @@ public class AppLayoutBasic extends AppLayout {
         nav.addItem(new SideNavItem("Schreibtische",          "/schreibtische",          VaadinIcon.DESKTOP.create()));
         nav.addItem(new SideNavItem("Meetingr\u00e4ume",       "/meetingraeume",          VaadinIcon.PRESENTATION.create()));
         nav.addItem(new SideNavItem("Buchungen",              "/buchungen",              VaadinIcon.CALENDAR.create()));
+        nav.addItem(new SideNavItem("Standortauslastung",     "/standortauslastung",     VaadinIcon.CHART.create()));
 
         nav.getItems().forEach(navItem -> navItem.setMatchNested(true));
         return nav;
