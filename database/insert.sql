@@ -741,12 +741,12 @@ VALUES
 ( 2, 10000002, 'Telekom Deutschland GmbH', false),
 ( 3, 10000003, 'T-Systems International GmbH', true),
 ( 4, 10000004, 'congstar GmbH', false),
-( 5, 10000005, 'Deutsche Telekom MMS GmbH', true), 
+( 5, 10000005, 'Deutsche Telekom MMS GmbH', true),
 ( 6, 10000006, 'Deutsche Telekom Privatkunden-Vertrieb GmbH', false),
-( 7, 10000007, 'Deutsche Telekom AG', true), 
+( 7, 10000007, 'Deutsche Telekom AG', true),
 ( 8, 10000008, 'Telekom Deutschland GmbH', false),
 ( 9, 10000009, 'congstar GmbH', false),
-( 10, 10000010, 'Deutsche Telekom MMS GmbH', true); 
+( 10, 10000010, 'Deutsche Telekom MMS GmbH', true);
 
 INSERT INTO Telekom_Shop (
     Adresse_id,
@@ -927,16 +927,16 @@ DECLARE
     superchapter_counter INT;
     squad_counter INT;
     chapter_counter INT;
-    
+
     -- IDs für erstellte Organisationseinheiten
     tribe_id INT;
     supersquad_id INT;
     superchapter_id INT;
-    
+
     -- Für Leiter und Standort
     leiter_pnr INT;
     standort_id_val INT;
-    
+
     -- Hilfsvariable für bereits vergebene Leiter
     used_leaders INT[] := ARRAY[]::INT[];
 BEGIN
@@ -957,14 +957,14 @@ BEGIN
 			from Buerogebaeude
 			order by random()
 			limit 1;
-            
+
             used_leaders := array_append(used_leaders, leiter_pnr);
-            
+
             -- Tribe erstellen
             INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter)
             VALUES ('Tribe-' || i || '-' || tribe_counter, 'Tribe', standort_id_val, leiter_pnr)
             RETURNING Einheitsnummer INTO tribe_id;
-            
+
             -- 2 Supersquads pro Tribe
             FOR supersquad_counter IN 1..2 LOOP
                 -- Leiter für Supersquad finden
@@ -980,14 +980,14 @@ BEGIN
 				from Buerogebaeude
 				order by random()
 				limit 1;
-                
+
                 used_leaders := array_append(used_leaders, leiter_pnr);
-                
+
                 -- Supersquad erstellen
                 INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter, uebergeordnete_OE)
                 VALUES ('Supersquad-' || i || '-' || tribe_counter || '-' || supersquad_counter, 'Supersquad', standort_id_val, leiter_pnr, tribe_id)
                 RETURNING Einheitsnummer INTO supersquad_id;
-                
+
                 -- 3 Squads pro Supersquad
                 FOR squad_counter IN 1..3 LOOP
                     -- Leiter für Squad finden
@@ -1003,15 +1003,15 @@ BEGIN
 					from Standort
 					order by random()
 					limit 1;
-                    
+
                     used_leaders := array_append(used_leaders, leiter_pnr);
-                    
+
                     -- Squad erstellen
                     INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter, uebergeordnete_OE)
                     VALUES ('Squad-' || i || '-' || tribe_counter || '-' || supersquad_counter || '-' || squad_counter, 'Squad', standort_id_val, leiter_pnr, supersquad_id);
                 END LOOP;
             END LOOP;
-            
+
             -- 2 Superchapters pro Tribe
             FOR superchapter_counter IN 1..2 LOOP
                 -- Leiter für Superchapter finden
@@ -1027,14 +1027,14 @@ BEGIN
 				from Buerogebaeude
 				order by random()
 				limit 1;
-                
+
                 used_leaders := array_append(used_leaders, leiter_pnr);
-                
+
                 -- Superchapter erstellen
                 INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter, uebergeordnete_OE)
                 VALUES ('Superchapter-' || i || '-' || tribe_counter || '-' || superchapter_counter, 'Superchapter', standort_id_val, leiter_pnr, tribe_id)
                 RETURNING Einheitsnummer INTO superchapter_id;
-                
+
                 -- 2 Chapters pro Superchapter
                 FOR chapter_counter IN 1..2 LOOP
                     -- Leiter für Chapter finden
@@ -1043,16 +1043,16 @@ BEGIN
 		            FROM Mitarbeiter m
 		            WHERE m.Personalnummer NOT IN (SELECT unnest(used_leaders))
 		            LIMIT 1;
-		
+
 					-- Standort für OE wählen (muss der Firma der OE gehören)
 					select Standort_id
 					into standort_id_val
 					from Buerogebaeude
 					order by random()
 					limit 1;
-                    
+
                     used_leaders := array_append(used_leaders, leiter_pnr);
-                    
+
                     -- Chapter erstellen
                     INSERT INTO Organisationseinheit (Name, Art, Standort_id, Leiter, uebergeordnete_OE)
                     VALUES ('Chapter-' || i || '-' || tribe_counter || '-' || superchapter_counter || '-' || chapter_counter, 'Chapter', standort_id_val, leiter_pnr, superchapter_id);
@@ -1212,7 +1212,7 @@ SELECT
     t.eol::date
 FROM (VALUES
     -- Zentrales Kundenstammdatensystem (MDM)
-    ('ICTO-2001', 'Meridian Core',     'In Progress',     3,  5000000, 'Squad-1-2-1-1',  1, '2030-12-31'),
+    ('ICTO-2001', 'Meridian Core',     'In Progress',     3,  5000000, 'Squad-1-1-1-1',  1, '2030-12-31'),
     -- Zentralisiertes Logging- und Monitoring-System
     ('ICTO-2002', 'Polaris Log',       'Abgeschlossen',   1,   800000, 'Squad-2-2-1-1',  2, '2028-06-30'),
     -- API-Gateway und Enterprise-Service-Bus

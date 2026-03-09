@@ -79,17 +79,19 @@ create table if not exists Organisationseinheit (
 	Art					text			not null	check (Art in ('Squad', 'Supersquad', 'Chapter', 'Superchapter', 'Tribe')),
 	Standort_id			int				not null	references Standort (Standort_id),
 	uebergeordnete_OE	int							references Organisationseinheit (Einheitsnummer),
+	Firma				text			not null	references Firma (Name),
 	Leiter				personalnummer	not null	references Mitarbeiter (Personalnummer)
 );
 
 create index on Organisationseinheit(Standort_id);
 create index on Organisationseinheit(uebergeordnete_OE);
+create index on Organisationseinheit(Firma);
 create index on Organisationseinheit(Leiter);
 
 create table if not exists Mitglied (
 	Mitarbeiter				personalnummer	references Mitarbeiter (Personalnummer),
 	Organisationseinheit	int				references Organisationseinheit (Einheitsnummer),
-	
+
 	primary key (Mitarbeiter, Organisationseinheit)
 );
 
@@ -114,7 +116,7 @@ create table if not exists IT_Asset (
 create table if not exists Abhaengigkeit (
 	Upstream_IT_Asset	icto	references IT_Asset (ICTO_Nummer),
 	Downstream_IT_Asset	icto	references IT_Asset (ICTO_Nummer),
-	
+
 	primary key (Upstream_IT_Asset, Downstream_IT_Asset)
 );
 
@@ -145,7 +147,7 @@ create table if not exists Arbeitsplatz (
 	Standort_id		int		references Buerogebaeude (Standort_id),
 	LAN_vorhanden	boolean default false,
 	WLAN_vorhanden	boolean default false,
-	
+
 	primary key (Bezeichnung, Standort_id)
 );
 
@@ -164,6 +166,31 @@ create table if not exists Buchung (
 	Standort_id		int				references Buerogebaeude (Standort_id),
 	Datum			date,
 	Mitarbeiter		personalnummer	references Mitarbeiter (Personalnummer),
-	
+
 	primary key (Bezeichnung, Standort_id, Datum)
 );
+
+create view v_Standortauslastung as
+select
+    ap.Standort_id,
+    count(b.Bezeichnung) as Buchungen,
+    count(ap.Bezeichnung) as Gesamt_Arbeitsplaetze,
+    round(
+        count(b.Bezeichnung) * 100.0
+        / nullif(count(ap.Bezeichnung), 0), 1
+    ) as Auslastung_Prozent,
+    case
+        when count(ap.Bezeichnung) = 0 then 'Keine Daten'
+        when count(b.Bezeichnung) * 100.0
+             / count(ap.Bezeichnung) >= 90  then 'Ausgelastet'
+        when count(b.Bezeichnung) * 100.0
+             / count(ap.Bezeichnung) >= 50  then 'Mittel'
+        else 'Verfügbar'
+    end as Auslastungsklasse
+from Arbeitsplatz ap
+left join Buchung b
+    on  ap.Bezeichnung = b.Bezeichnung
+    and ap.Standort_id = b.Standort_id
+    and b.Datum = '2026-03-02'
+join Standort s on ap.Standort_id = s.Standort_id
+group by ap.Standort_id; 
