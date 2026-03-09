@@ -105,7 +105,7 @@ create table if not exists Kunde (
 create table if not exists IT_Asset (
 	ICTO_Nummer				icto	primary key,
 	Name					text	not null,
-	Status					text	not null	check (Status in ('Nicht gestartet', 'In Progress', 'Abgeschlossen', 'Abgebrochen')),
+	Status					text			not null	check (Status in ('Nicht gestartet', 'In Progress', 'Abgeschlossen', 'Abgebrochen')),
 	Risikostufe				int					check (Risikostufe between 1 and 5),
 	Budget					int,
 	Organisationseinheit	int 	not null	references Organisationseinheit (Einheitsnummer),
@@ -168,28 +168,3 @@ create table if not exists Buchung (
 
 	primary key (Bezeichnung, Standort_id, Datum)
 );
-
-create view v_Standortauslastung as
-select
-    ap.Standort_id,
-    count(b.Bezeichnung) as Buchungen,
-    count(ap.Bezeichnung) as Gesamt_Arbeitsplaetze,
-    round(
-        count(b.Bezeichnung) * 100.0
-        / nullif(count(ap.Bezeichnung), 0), 1
-    ) as Auslastung_Prozent,
-    case
-        when count(ap.Bezeichnung) = 0 then 'Keine Daten'
-        when count(b.Bezeichnung) * 100.0
-             / count(ap.Bezeichnung) >= 90  then 'Ausgelastet'
-        when count(b.Bezeichnung) * 100.0
-             / count(ap.Bezeichnung) >= 50  then 'Mittel'
-        else 'Verfügbar'
-    end as Auslastungsklasse
-from Arbeitsplatz ap
-left join Buchung b
-    on  ap.Bezeichnung = b.Bezeichnung
-    and ap.Standort_id = b.Standort_id
-    and b.Datum = '2026-03-02'
-join Standort s on ap.Standort_id = s.Standort_id
-group by ap.Standort_id; 
