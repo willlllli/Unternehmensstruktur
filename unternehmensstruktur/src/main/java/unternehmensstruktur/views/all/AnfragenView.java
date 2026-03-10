@@ -11,6 +11,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +75,7 @@ public class AnfragenView extends VerticalLayout {
             q3Grid
         ));
 
-        // Q4 – Freie Meetingr\u00e4ume (zwei Parameter)
+        // Q4 – Freie Meetingräume (zwei Parameter)
         IntegerField q4Standort = new IntegerField("Standort-ID");
         q4Standort.setMin(1);
         DatePicker q4Datum = new DatePicker("Datum");
@@ -110,7 +111,7 @@ public class AnfragenView extends VerticalLayout {
         // Q7 – Budget je OE
         Grid<Map<String, Object>> q7Grid = createGrid();
         accordion.add("Q7 \u2013 Budget-Summe je Squad", buildContent(
-            "Summiert das IT-Asset-Budget pro Squad, dem tatsächlich ein IT-Asset zugeordnet ist.",
+            "Summiert das IT-Asset-Budget pro Squad, dem tats\u00e4chlich ein IT-Asset zugeordnet ist.",
             new Button("Laden", e -> fillGrid(q7Grid, queryService.getBudgetJeOE())),
             q7Grid
         ));
@@ -159,16 +160,19 @@ public class AnfragenView extends VerticalLayout {
             q9Grids
         ));
 
-        // Q10 – Abh\u00e4ngigkeitskette eines IT-Assets
-        IntegerField q10ICTO = new IntegerField("ICTO-Nummer (Upstream)");
-        q10ICTO.setMin(1);
+        // Q10 – Abhängigkeitskette eines IT-Assets
+        TextField q10ICTO = new TextField("ICTO-Nummer (Upstream)");
+        q10ICTO.setPlaceholder("ICTO-xxxx");
+        q10ICTO.setPattern("ICTO-\\d+");
+        q10ICTO.setErrorMessage("Format muss ICTO-xxxx sein (z. B. ICTO-2001)");
         Grid<Map<String, Object>> q10Grid = createGrid();
         accordion.add("Q10 \u2013 Abh\u00e4ngigkeitskette eines IT-Assets", buildContent(
             "Zeigt alle Downstream-Assets eines Upstream-IT-Assets mit Risikostufe, verantwortlichem Team und Ansprechpartner (mehrere JOINs).",
             q10ICTO,
             new Button("Abfragen", e -> {
-                if (q10ICTO.getValue() != null)
-                    fillGrid(q10Grid, queryService.getAbhaengigkeiten(q10ICTO.getValue()));
+                String val = q10ICTO.getValue();
+                if (val != null && !val.isBlank())
+                    fillGrid(q10Grid, queryService.getAbhaengigkeiten(val.trim()));
             }),
             q10Grid
         ));

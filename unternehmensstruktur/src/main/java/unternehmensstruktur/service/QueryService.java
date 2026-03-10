@@ -140,7 +140,7 @@ public class QueryService {
     }
 
     // Q10 – Abhängigkeitskette eines IT-Assets mit Ansprechpartner
-    public List<Map<String, Object>> getAbhaengigkeiten(int ictoNummer) {
+    public List<Map<String, Object>> getAbhaengigkeiten(String ictoNummer) {
         String sql = """
                 SELECT up.ICTO_Nummer              AS Upstream_ITAsset,
                        up.Name                     AS Upstream_Name,
