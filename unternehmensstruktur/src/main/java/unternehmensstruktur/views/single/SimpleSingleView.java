@@ -294,6 +294,7 @@ public abstract class SimpleSingleView<D> extends VerticalLayout implements HasU
                 dp.setReadOnly(!editMode);
                 layout.add(dp);
             } else if (type == Integer.class) {
+                // Integer-FK-Felder und normale Integer-Felder
                 IntegerField f = new IntegerField(label);
                 if (value instanceof Integer) f.setValue((Integer) value);
                 f.setReadOnly(!editMode);
