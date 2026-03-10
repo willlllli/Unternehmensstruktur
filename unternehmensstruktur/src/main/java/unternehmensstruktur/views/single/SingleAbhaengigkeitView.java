@@ -1,5 +1,6 @@
 package unternehmensstruktur.views.single;
 
+import unternehmensstruktur.model.IctoNumber;
 import unternehmensstruktur.model.db.AbhaengigkeitId;
 import unternehmensstruktur.model.dto.AbhaengigkeitDto;
 import unternehmensstruktur.service.AbhaengigkeitService;
@@ -16,7 +17,7 @@ public class SingleAbhaengigkeitView extends SimpleSingleView<AbhaengigkeitDto> 
 
     @Override
     protected void addFields() {
-        addFkField("Upstream IT Asset",   () -> dto.getUpstreamItAsset(),   value -> dto.setUpstreamItAsset((String) value),    "it-assets");
-        addFkField("Downstream IT Asset", () -> dto.getDownstreamItAsset(), value -> dto.setDownstreamItAsset((String) value),  "it-assets");
+        addIctoFkField("Upstream IT Asset",   () -> dto.getUpstreamItAsset(),   value -> dto.setUpstreamItAsset((String) value),   "it-assets");
+        addIctoFkField("Downstream IT Asset", () -> dto.getDownstreamItAsset(), value -> dto.setDownstreamItAsset((String) value), "it-assets");
     }
 }
