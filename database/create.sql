@@ -170,31 +170,38 @@ create table if not exists Buchung (
 );
 
 -- View: Auslastung aller Buerogebebaeude-Standorte pro Datum
+-- gesamt_arbeitsplaetze wird per Subquery datums-unabhaengig gezaehlt,
+-- damit der LEFT JOIN auf Buchung das Ergebnis nicht verfaelscht.
 CREATE OR REPLACE VIEW v_Standortauslastung AS
 SELECT
     ap.standort_id,
     b.datum,
     COUNT(b.bezeichnung)                                            AS buchungen,
-    COUNT(ap.bezeichnung)                                           AS gesamt_arbeitsplaetze,
+    ap_gesamt.anzahl                                                AS gesamt_arbeitsplaetze,
     ROUND(
         COUNT(b.bezeichnung) * 100.0
-        / NULLIF(COUNT(ap.bezeichnung), 0), 1
+        / NULLIF(ap_gesamt.anzahl, 0), 1
     )                                                               AS auslastung_prozent,
     CASE
-        WHEN COUNT(ap.bezeichnung) = 0
+        WHEN ap_gesamt.anzahl = 0
             THEN 'Keine Daten'
         WHEN COUNT(b.bezeichnung) * 100.0
-             / COUNT(ap.bezeichnung) >= 90
+             / ap_gesamt.anzahl >= 90
             THEN 'Ausgelastet'
         WHEN COUNT(b.bezeichnung) * 100.0
-             / COUNT(ap.bezeichnung) >= 50
+             / ap_gesamt.anzahl >= 50
             THEN 'Mittel'
         ELSE 'Verfuegbar'
     END                                                             AS auslastungsklasse
 FROM Arbeitsplatz ap
+JOIN (
+    SELECT standort_id, COUNT(*) AS anzahl
+    FROM Arbeitsplatz
+    GROUP BY standort_id
+) ap_gesamt ON ap.standort_id = ap_gesamt.standort_id
 LEFT JOIN Buchung b
     ON  ap.bezeichnung = b.bezeichnung
     AND ap.standort_id  = b.standort_id
 JOIN Standort s
     ON ap.standort_id = s.standort_id
-GROUP BY ap.standort_id, b.datum;
+GROUP BY ap.standort_id, b.datum, ap_gesamt.anzahl;
