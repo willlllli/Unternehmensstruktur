@@ -11,12 +11,12 @@ public class SingleAbhaengigkeitView extends SimpleSingleView<AbhaengigkeitDto> 
                 param -> { String[] p = param.split("~"); return service.findById(new AbhaengigkeitId(p[0], p[1])); },
                 service::save,
                 dto -> service.deleteById(new AbhaengigkeitId(dto.getUpstreamItAsset(), dto.getDownstreamItAsset())));
-        setHeaderSupplier(() -> dto.getUpstreamItAsset() + " → " + dto.getDownstreamItAsset());
+        setHeaderSupplier(() -> dto.getUpstreamItAsset() + " \u2192 " + dto.getDownstreamItAsset());
     }
 
     @Override
     protected void addFields() {
-        addFkField("Upstream IT Asset",   () -> dto.getUpstreamItAsset(),   value -> dto.setUpstreamItAsset((String) value),    "it-assets");
-        addFkField("Downstream IT Asset", () -> dto.getDownstreamItAsset(), value -> dto.setDownstreamItAsset((String) value),  "it-assets");
+        addIctoFkField("Upstream IT Asset",   () -> dto.getUpstreamItAsset(),   value -> dto.setUpstreamItAsset((String) value),   "it-assets");
+        addIctoFkField("Downstream IT Asset", () -> dto.getDownstreamItAsset(), value -> dto.setDownstreamItAsset((String) value), "it-assets");
     }
 }
