@@ -1,5 +1,6 @@
 package unternehmensstruktur.views.single;
 
+import unternehmensstruktur.model.IctoNumber;
 import unternehmensstruktur.model.dto.ProjektDto;
 import unternehmensstruktur.service.ProjektService;
 
@@ -17,7 +18,7 @@ public class SingleProjektView extends SimpleSingleView<ProjektDto> {
 
     @Override
     protected void addFields() {
-        addField("ICTO-Nummer",            () -> dto.getIctoNummer(),             value -> { if (createMode) dto.setIctoNummer((String) value); });
+        addField("ICTO-Nummer",            () -> dto.getIctoNummer(),             value -> { if (createMode) dto.setIctoNummer((String) value); }, IctoNumber.class);
         addField("Name",                   () -> dto.getName(),                   value -> dto.setName((String) value));
         addField("Status",                 () -> dto.getStatus(),                 value -> dto.setStatus((String) value));
         addField("Risikostufe",            () -> dto.getRisikostufe(),            value -> dto.setRisikostufe(toInt(value)),            Integer.class);
