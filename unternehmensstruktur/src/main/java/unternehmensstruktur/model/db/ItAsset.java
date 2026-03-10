@@ -15,7 +15,7 @@ import lombok.Setter;
 public class ItAsset {
 
     @Id
-    @Column(name = "icto_nummer")
+    @Column(name = "icto_nummer", columnDefinition = "text")
     private String ictoNummer;
 
     @Column(name = "name", nullable = false)
