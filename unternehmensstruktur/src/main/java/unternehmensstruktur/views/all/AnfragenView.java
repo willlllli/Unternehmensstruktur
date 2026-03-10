@@ -109,8 +109,8 @@ public class AnfragenView extends VerticalLayout {
 
         // Q7 – Budget je OE
         Grid<Map<String, Object>> q7Grid = createGrid();
-        accordion.add("Q7 \u2013 Budget-Summe je Organisationseinheit", buildContent(
-            "Summiert das IT-Asset-Budget pro Organisationseinheit.",
+        accordion.add("Q7 \u2013 Budget-Summe je Squad", buildContent(
+            "Summiert das IT-Asset-Budget pro Squad, dem tatsächlich ein IT-Asset zugeordnet ist.",
             new Button("Laden", e -> fillGrid(q7Grid, queryService.getBudgetJeOE())),
             q7Grid
         ));
