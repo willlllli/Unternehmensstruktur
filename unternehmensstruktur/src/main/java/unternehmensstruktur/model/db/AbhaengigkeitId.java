@@ -17,9 +17,9 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class AbhaengigkeitId implements Serializable {
 
-    @Column(name = "upstream_it_asset", columnDefinition = "text")
+    @Column(name = "upstream_it_asset")
     private String upstreamItAsset;
 
-    @Column(name = "downstream_it_asset", columnDefinition = "text")
+    @Column(name = "downstream_it_asset")
     private String downstreamItAsset;
 }
