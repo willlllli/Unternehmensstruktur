@@ -168,3 +168,33 @@ create table if not exists Buchung (
 
 	primary key (Bezeichnung, Standort_id, Datum)
 );
+
+-- View: Auslastung aller Buerogebebaeude-Standorte pro Datum
+CREATE OR REPLACE VIEW v_Standortauslastung AS
+SELECT
+    ap.standort_id,
+    b.datum,
+    COUNT(b.bezeichnung)                                            AS buchungen,
+    COUNT(ap.bezeichnung)                                           AS gesamt_arbeitsplaetze,
+    ROUND(
+        COUNT(b.bezeichnung) * 100.0
+        / NULLIF(COUNT(ap.bezeichnung), 0), 1
+    )                                                               AS auslastung_prozent,
+    CASE
+        WHEN COUNT(ap.bezeichnung) = 0
+            THEN 'Keine Daten'
+        WHEN COUNT(b.bezeichnung) * 100.0
+             / COUNT(ap.bezeichnung) >= 90
+            THEN 'Ausgelastet'
+        WHEN COUNT(b.bezeichnung) * 100.0
+             / COUNT(ap.bezeichnung) >= 50
+            THEN 'Mittel'
+        ELSE 'Verfuegbar'
+    END                                                             AS auslastungsklasse
+FROM Arbeitsplatz ap
+LEFT JOIN Buchung b
+    ON  ap.bezeichnung = b.bezeichnung
+    AND ap.standort_id  = b.standort_id
+JOIN Standort s
+    ON ap.standort_id = s.standort_id
+GROUP BY ap.standort_id, b.datum;
