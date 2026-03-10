@@ -119,7 +119,7 @@ public class AnfragenView extends VerticalLayout {
         // Q8 – Durchschnittliche Standortauslastung (Einzelwert)
         Span q8Result = new Span("\u2013 noch nicht geladen \u2013");
         accordion.add("Q8 \u2013 Durchschnittliche Standortauslastung", buildContent(
-            "Berechnet den Durchschnitt der prozentualen Auslastung aller Standorte \u00fcber die View v_Standortauslastung (AVG).",
+            "Berechnet für ein bestimmtes Datum den Durchschnitt der prozentualen Auslastung aller Standorte \u00fcber die View v_Standortauslastung (AVG).",
             new Button("Laden", e -> {
                 Double avg = queryService.getAvgStandortauslastung();
                 q8Result.setText(avg != null
