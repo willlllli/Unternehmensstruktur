@@ -23,6 +23,7 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.QueryParameters;
+import unternehmensstruktur.model.IctoNumber;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -93,20 +94,34 @@ public abstract class SimpleSingleView<D> extends VerticalLayout implements HasU
     }
 
     /**
-     * Registriert ein Foreign-Key-Feld.
-     * Im View-Modus: klickbarer Link, der zur Tabellenansicht der Ziel-Entitaet navigiert
-     * und dort automatisch den Detail-Dialog fuer den referenzierten Eintrag oeffnet.
-     * Im Edit-Modus: normales IntegerField.
+     * Registriert ein Foreign-Key-Feld mit Integer-PK.
+     * Im View-Modus: klickbarer Link zur Zieltabelle.
+     * Im Edit-Modus: IntegerField.
      *
      * @param label           Angezeigter Feldname
      * @param getter          Liefert den FK-Wert (Integer)
      * @param setter          Setzt den FK-Wert
      * @param tableRouteBase  Basispfad der Zieltabelle, z. B. {@code "standorte"}
-     *                        (entspricht dem Wert ohne "/show", also der All-View-Route)
      */
     protected void addFkField(String label, Supplier<Object> getter, Consumer<Object> setter, String tableRouteBase) {
         editableFields.put(label, Map.entry(getter, setter));
         fieldTypes.put(label, Integer.class);
+        fkRoutes.put(label, tableRouteBase);
+    }
+
+    /**
+     * Registriert ein Foreign-Key-Feld mit ICTO-Nummer als PK (Format "ICTO-xxxx").
+     * Im View-Modus: klickbarer Link zur Zieltabelle.
+     * Im Edit-Modus: TextField mit Placeholder "ICTO-xxxx" und Regex-Validierung.
+     *
+     * @param label           Angezeigter Feldname
+     * @param getter          Liefert den FK-Wert (String, z. B. "ICTO-2001")
+     * @param setter          Setzt den FK-Wert
+     * @param tableRouteBase  Basispfad der Zieltabelle, z. B. {@code "it-assets"}
+     */
+    protected void addIctoFkField(String label, Supplier<Object> getter, Consumer<Object> setter, String tableRouteBase) {
+        editableFields.put(label, Map.entry(getter, setter));
+        fieldTypes.put(label, IctoNumber.class);
         fkRoutes.put(label, tableRouteBase);
     }
 
@@ -240,8 +255,7 @@ public abstract class SimpleSingleView<D> extends VerticalLayout implements HasU
             String fkTableRoute = fkRoutes.get(label);
 
             if (fkTableRoute != null && !editMode) {
-                // FK-Feld im View-Modus:
-                // Navigiert zur Tabellenansicht der Ziel-Entitaet und oeffnet dort den Dialog.
+                // FK-Feld im View-Modus: klickbarer Link zur Zieltabelle
                 HorizontalLayout row = new HorizontalLayout();
                 row.setAlignItems(Alignment.CENTER);
                 Span lbl = new Span(label + ": ");
@@ -260,6 +274,18 @@ public abstract class SimpleSingleView<D> extends VerticalLayout implements HasU
                     row.add(lbl, new Span("\u2013"));
                 }
                 layout.add(row);
+            } else if (type == IctoNumber.class) {
+                // ICTO-Feld im Edit-Modus: TextField mit Placeholder und Regex-Validierung
+                TextField tf = new TextField(label);
+                tf.setPlaceholder("ICTO-xxxx");
+                tf.setPattern("ICTO-\\d+");
+                tf.setErrorMessage("Format muss ICTO-xxxx sein (z. B. ICTO-2001)");
+                if (value != null) tf.setValue(value.toString());
+                tf.setReadOnly(!editMode);
+                tf.setWidthFull();
+                tf.setValueChangeMode(ValueChangeMode.EAGER);
+                tf.addValueChangeListener(e -> entry.getValue().accept(e.getValue()));
+                layout.add(tf);
             } else if (type == LocalDate.class) {
                 DatePicker dp = new DatePicker(label);
                 dp.setLocale(Locale.GERMANY);
@@ -268,7 +294,6 @@ public abstract class SimpleSingleView<D> extends VerticalLayout implements HasU
                 dp.setReadOnly(!editMode);
                 layout.add(dp);
             } else if (type == Integer.class) {
-                // Auch FK-Felder im Edit-Modus landen hier
                 IntegerField f = new IntegerField(label);
                 if (value instanceof Integer) f.setValue((Integer) value);
                 f.setReadOnly(!editMode);
