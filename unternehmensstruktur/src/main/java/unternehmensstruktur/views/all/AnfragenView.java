@@ -116,15 +116,20 @@ public class AnfragenView extends VerticalLayout {
             q7Grid
         ));
 
-        // Q8 – Durchschnittliche Standortauslastung (Einzelwert)
+        // Q8 – Durchschnittliche Standortauslastung für ein Datum
+        DatePicker q8Datum = new DatePicker("Datum");
+        q8Datum.setValue(LocalDate.now());
         Span q8Result = new Span("\u2013 noch nicht geladen \u2013");
         accordion.add("Q8 \u2013 Durchschnittliche Standortauslastung", buildContent(
-            "Berechnet für ein bestimmtes Datum den Durchschnitt der prozentualen Auslastung aller Standorte \u00fcber die View v_Standortauslastung (AVG).",
+            "Berechnet den Durchschnitt der prozentualen Auslastung aller Standorte f\u00fcr ein gew\u00e4hltes Datum \u00fcber die View v_Standortauslastung (AVG).",
+            q8Datum,
             new Button("Laden", e -> {
-                Double avg = queryService.getAvgStandortauslastung();
-                q8Result.setText(avg != null
-                    ? String.format("\u00d8 Auslastung: %.2f %%", avg)
-                    : "Keine Daten vorhanden");
+                if (q8Datum.getValue() != null) {
+                    Double avg = queryService.getAvgStandortauslastung(q8Datum.getValue());
+                    q8Result.setText(avg != null
+                        ? String.format("\u00d8 Auslastung am %s: %.2f %%", q8Datum.getValue(), avg)
+                        : "Keine Daten f\u00fcr dieses Datum vorhanden");
+                }
             }),
             q8Result
         ));
@@ -181,7 +186,6 @@ public class AnfragenView extends VerticalLayout {
         setSizeFull();
     }
 
-    /** Baut den Inhalt eines Accordion-Panels: Beschreibung + beliebige Komponenten */
     private VerticalLayout buildContent(String description, Component... components) {
         Paragraph desc = new Paragraph(description);
         desc.getStyle().set("color", "var(--lumo-secondary-text-color)");
@@ -191,7 +195,6 @@ public class AnfragenView extends VerticalLayout {
         return layout;
     }
 
-    /** Erstellt ein leeres, einheitlich gestyltes Grid fuer Map-Daten */
     private Grid<Map<String, Object>> createGrid() {
         Grid<Map<String, Object>> grid = new Grid<>();
         grid.setWidthFull();
@@ -199,7 +202,6 @@ public class AnfragenView extends VerticalLayout {
         return grid;
     }
 
-    /** Befuellt ein Grid dynamisch: Map-Keys werden zu Spalten-Headern */
     private void fillGrid(Grid<Map<String, Object>> grid, List<Map<String, Object>> data) {
         grid.removeAllColumns();
         if (!data.isEmpty()) {

@@ -103,10 +103,10 @@ public class QueryService {
         return jdbc.queryForList(sql);
     }
 
-    // Q8 – Durchschnittliche Auslastung aller Standorte (via View v_Standortauslastung)
-    public Double getAvgStandortauslastung() {
-        String sql = "SELECT AVG(Auslastung_Prozent) FROM v_Standortauslastung";
-        return jdbc.queryForObject(sql, Double.class);
+    // Q8 – Durchschnittliche Auslastung aller Standorte für ein bestimmtes Datum (via View v_Standortauslastung)
+    public Double getAvgStandortauslastung(LocalDate datum) {
+        String sql = "SELECT AVG(auslastung_prozent) FROM unternehmensstruktur.v_Standortauslastung WHERE datum = ?";
+        return jdbc.queryForObject(sql, Double.class, datum);
     }
 
     // Q9a – Mitarbeiter in laufenden Projekten eines Kunden MIT DISTINCT

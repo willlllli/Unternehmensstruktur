@@ -1,31 +1,31 @@
 package unternehmensstruktur.service;
 
+import unternehmensstruktur.model.db.VStandortauslastung;
 import unternehmensstruktur.model.dto.StandortauslastungDto;
-import unternehmensstruktur.repository.ArbeitsplatzRepository;
+import unternehmensstruktur.repository.StandortauslastungRepository;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class StandortauslastungService {
 
-    private final ArbeitsplatzRepository arbeitsplatzRepository;
+    private final StandortauslastungRepository standortauslastungRepository;
 
-    public StandortauslastungService(ArbeitsplatzRepository arbeitsplatzRepository) {
-        this.arbeitsplatzRepository = arbeitsplatzRepository;
+    public StandortauslastungService(StandortauslastungRepository standortauslastungRepository) {
+        this.standortauslastungRepository = standortauslastungRepository;
     }
 
     public List<StandortauslastungDto> getAuslastung(LocalDate datum) {
-        return arbeitsplatzRepository.findAuslastungByDatum(datum)
+        return standortauslastungRepository.findByIdDatum(datum)
                 .stream()
-                .map(row -> new StandortauslastungDto(
-                        ((Number) row[0]).intValue(),
-                        ((Number) row[1]).longValue(),
-                        ((Number) row[2]).longValue(),
-                        row[3] != null ? new BigDecimal(row[3].toString()) : null,
-                        (String) row[4]
+                .map(v -> new StandortauslastungDto(
+                        v.getId().getStandortId(),
+                        v.getBuchungen(),
+                        v.getGesamtArbeitsplaetze(),
+                        v.getAuslastungProzent(),
+                        v.getAuslastungsklasse()
                 ))
                 .toList();
     }
