@@ -65,7 +65,7 @@ public class AnfragenView extends VerticalLayout {
         q3OE.setMin(1);
         Grid<Map<String, Object>> q3Grid = createGrid();
         accordion.add("Q3 \u2013 Mitarbeiter einer Organisationseinheit", buildContent(
-            "Gibt alle Mitarbeiter einer OE mit Personalnummer, Name und gesch\u00e4ftlicher E-Mail aus.",
+            "Gibt alle direkten Mitarbeiter einer OE mit Personalnummer, Name und gesch\u00e4ftlicher E-Mail aus. Mitarbeiter von untergeordneten OEs sind nicht mit eingeschlossen.",
             q3OE,
             new Button("Abfragen", e -> {
                 if (q3OE.getValue() != null)
