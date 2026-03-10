@@ -103,9 +103,27 @@ public class QueryService {
         return jdbc.queryForList(sql);
     }
 
-    // Q8 – Durchschnittliche Auslastung aller Standorte (via View)
+    // Q8 – Durchschnittliche Auslastung aller Standorte
+    // Die View v_Standortauslastung existiert nicht als DB-Objekt;
+    // die Auslastungslogik ist identisch mit ArbeitsplatzRepository.findAuslastungByDatum,
+    // hier aber als datums-unabhängiger Gesamtdurchschnitt über alle Buchungstage.
     public Double getAvgStandortauslastung() {
-        String sql = "SELECT AVG(Auslastung_Prozent) FROM v_Standortauslastung";
+        String sql = """
+                SELECT AVG(auslastung_prozent) FROM (
+                    SELECT
+                        ROUND(
+                            COUNT(b.bezeichnung) * 100.0
+                            / NULLIF(COUNT(ap.bezeichnung), 0), 1
+                        ) AS auslastung_prozent
+                    FROM unternehmensstruktur.Arbeitsplatz ap
+                    LEFT JOIN unternehmensstruktur.Buchung b
+                        ON  ap.bezeichnung = b.bezeichnung
+                        AND ap.standort_id  = b.standort_id
+                    JOIN unternehmensstruktur.Standort s
+                        ON ap.standort_id = s.standort_id
+                    GROUP BY ap.standort_id, b.datum
+                ) sub
+                """;
         return jdbc.queryForObject(sql, Double.class);
     }
 
