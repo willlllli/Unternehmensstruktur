@@ -26,7 +26,7 @@ public class StandortauslastungView extends VerticalLayout {
         H2 heading = new H2("Standortauslastung");
 
         DatePicker datePicker = new DatePicker("Datum");
-        datePicker.setValue(LocalDate.now());
+        datePicker.setValue(LocalDate.of(2026, 3, 3));
         datePicker.addValueChangeListener(e -> loadData(e.getValue()));
 
         grid.addColumn(StandortauslastungDto::getStandortId).setHeader("Standort-ID").setSortable(true);

@@ -25,6 +25,8 @@ import java.util.Map;
 @PageTitle("Anfragen")
 public class AnfragenView extends VerticalLayout {
 
+    private static final LocalDate DEFAULT_DATUM = LocalDate.of(2026, 3, 3);
+
     @Autowired
     public AnfragenView(QueryService queryService) {
         H2 heading = new H2("Vordefinierte Anfragen");
@@ -79,7 +81,7 @@ public class AnfragenView extends VerticalLayout {
         IntegerField q4Standort = new IntegerField("Standort-ID");
         q4Standort.setMin(1);
         DatePicker q4Datum = new DatePicker("Datum");
-        q4Datum.setValue(LocalDate.now());
+        q4Datum.setValue(DEFAULT_DATUM);
         Grid<Map<String, Object>> q4Grid = createGrid();
         accordion.add("Q4 \u2013 Freie Meetingr\u00e4ume nach Standort und Datum", buildContent(
             "Zeigt alle nicht gebuchten Meetingr\u00e4ume an einem Standort f\u00fcr ein gew\u00e4hltes Datum (LEFT JOIN).",
@@ -118,7 +120,7 @@ public class AnfragenView extends VerticalLayout {
 
         // Q8 – Durchschnittliche Standortauslastung für ein Datum
         DatePicker q8Datum = new DatePicker("Datum");
-        q8Datum.setValue(LocalDate.now());
+        q8Datum.setValue(DEFAULT_DATUM);
         Span q8Result = new Span("\u2013 noch nicht geladen \u2013");
         accordion.add("Q8 \u2013 Durchschnittliche Standortauslastung", buildContent(
             "Berechnet den Durchschnitt der prozentualen Auslastung aller Standorte f\u00fcr ein gew\u00e4hltes Datum \u00fcber die View v_Standortauslastung (AVG).",
