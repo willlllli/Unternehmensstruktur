@@ -19,6 +19,56 @@ Die Anwendung bildet die interne Struktur eines Unternehmens ab – von Mitarbei
 
 ---
 
+### Hinweis: Portbelegung
+
+Die Anwendung benötigt die folgenden Ports auf dem Host-System:
+
+| Port | Verwendung |
+|------|------------|
+| `8080` | Spring Boot / Vaadin Web-UI |
+| `5432` | PostgreSQL-Datenbank |
+
+Beide Ports müssen **frei** sein, bevor `docker compose up` ausgeführt wird. Port `5432` ist häufig bereits belegt, wenn ein lokaler PostgreSQL-Dienst läuft.
+
+**Port-Belegung prüfen:**
+
+Linux / macOS:
+```bash
+# Einzelnen Port prüfen
+ss -tlnp | grep ':8080'
+ss -tlnp | grep ':5432'
+
+# Alternativ mit lsof
+lsof -i :8080
+lsof -i :5432
+```
+
+Windows (PowerShell):
+```powershell
+# Einzelnen Port prüfen
+netstat -ano | Select-String ':8080'
+netstat -ano | Select-String ':5432'
+```
+
+Ist Port `5432` belegt, kann der lokal laufende PostgreSQL-Dienst vorübergehend gestoppt werden:
+
+Linux (systemd):
+```bash
+sudo systemctl stop postgresql
+```
+
+macOS (Homebrew):
+```bash
+brew services stop postgresql@16
+```
+
+Windows (PowerShell, als Administrator):
+```powershell
+Stop-Service -Name postgresql*
+```
+
+---
+
 ### 1. docker-compose.yml herunterladen
 
 **Linux / macOS:**
